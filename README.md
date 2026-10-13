@@ -66,6 +66,16 @@ Las pruebas mockean Ollama y WhatsApp, así que **no necesitas tener `ollama` co
 
 Consulta [ejemplos de conversación por WhatsApp](docs/ejemplos_whatsapp.md) para ver mensajes de ejemplo y el tipo de respuesta esperado.
 
+## Capturas de pruebas reales
+
+Estas capturas muestran al bot trabajando durante pruebas reales por WhatsApp:
+
+![Prueba real de NutriBot por WhatsApp 1](docs/imgs/wa_llama_1.jpeg)
+
+![Prueba real de NutriBot por WhatsApp 2](docs/imgs/wa_llama_2.jpeg)
+
+![Prueba real de NutriBot por WhatsApp 3](docs/imgs/wa_llama_3.jpeg)
+
 ## Endpoints
 
 | Método | Ruta       | Descripción                                  |
