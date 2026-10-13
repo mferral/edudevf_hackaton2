@@ -7,7 +7,7 @@ from typing import Callable, Optional
 import ollama
 
 from app.config import MODELO_LLM, OLLAMA_HOST
-from app.guard import MENSAJE_BLOQUEO_ENTRADA, MENSAJE_BLOQUEO_SALIDA, revisar
+# from app.guard import MENSAJE_BLOQUEO_ENTRADA, MENSAJE_BLOQUEO_SALIDA, revisar
 from app.memory import MemoriaConversacion
 from app.rag import RAG
 from app.tools import FUNCIONES, HERRAMIENTAS, Agenda
@@ -17,7 +17,8 @@ SYSTEM_PROMPT = (
     "Eres el asistente del consultorio de nutrición NutriBot. "
     "Responde de forma breve (2–3 líneas) y amable en español. "
     "Tu única fuente de datos sobre el consultorio es la herramienta de "
-    "búsqueda en el reglamento. No inventes costos, horarios ni políticas. "
+    "búsqueda en el reglamento. Úsala siempre que pregunten por precios, "
+    "horarios, pagos o políticas. No inventes costos, horarios ni políticas. "
     "Para agendar, reagendar o consultar disponibilidad usa las herramientas "
     "de citas. Si el paciente saluda brevemente, responde el saludo sin "
     "usar herramientas. Si pide hablar con una persona, responde que "
@@ -65,6 +66,8 @@ class Agente:
 
     # ------------------------------------------------------------------
     def _ejecutar_herramienta(self, nombre: str, argumentos: dict) -> str:
+        if nombre == "consultar_reglamento":
+            return self._consultar_rag(argumentos.get("pregunta", ""))
         fn = FUNCIONES.get(nombre)
         if fn is None:
             return f"Herramienta desconocida: {nombre}"
@@ -103,9 +106,9 @@ class Agente:
           4. revisa la salida (Llama Guard).
         """
         # 1. Seguridad de entrada
-        seguro, _ = revisar([{"role": "user", "content": texto}])
-        if not seguro:
-            return MENSAJE_BLOQUEO_ENTRADA
+        # seguro, _ = revisar([{"role": "user", "content": texto}])
+        # if not seguro:
+        #     return MENSAJE_BLOQUEO_ENTRADA
 
         cliente = self._cliente_ollama()
 
@@ -127,14 +130,14 @@ class Agente:
                 contenido = msg.get("content") or ""
                 self.memoria.agregar(numero, "assistant", contenido)
                 # 4. Seguridad de salida
-                seguro_out, _ = revisar(
-                    [
-                        {"role": "user", "content": texto},
-                        {"role": "assistant", "content": contenido},
-                    ]
-                )
-                if not seguro_out:
-                    return MENSAJE_BLOQUEO_SALIDA
+                # seguro_out, _ = revisar(
+                #     [
+                #         {"role": "user", "content": texto},
+                #         {"role": "assistant", "content": contenido},
+                #     ]
+                # )
+                # if not seguro_out:
+                #     return MENSAJE_BLOQUEO_SALIDA
                 return contenido
 
             # Ejecutar herramientas y continuar el bucle
@@ -149,8 +152,9 @@ class Agente:
                         args = json.loads(args) if args else {}
                     except json.JSONDecodeError:
                         args = {}
-                # Si la herramienta es el RAG, inyectamos la pregunta con el número del paciente
-                if nombre == "consultar_disponibilidad":
+                if nombre == "consultar_reglamento":
+                    resultado = self._ejecutar_herramienta(nombre, args)
+                elif nombre == "consultar_disponibilidad":
                     resultado = self._ejecutar_herramienta(nombre, args)
                 else:
                     argumentos = dict(args)

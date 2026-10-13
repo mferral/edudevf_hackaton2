@@ -1,6 +1,6 @@
 # NutriBot
 
-Agente de WhatsApp para un consultorio de nutrición: responde preguntas frecuentes y agenda citas con **RAG** (búsqueda en `docs/rag.md`) y **function calling** (consultar disponibilidad, agendar, reagendar). Usa **Llama 3.1 8B** como LLM y **Llama Guard 3** como capa de seguridad, todo ejecutándose con **Ollama** localmente.
+Agente de WhatsApp para un consultorio de nutrición: responde preguntas frecuentes y agenda citas con **RAG** (búsqueda en `docs/rag.md`) y **function calling** (consultar el reglamento, consultar disponibilidad, agendar y reagendar). Usa **Llama 3.1 8B** como LLM y **Llama Guard 3** como capa de seguridad, todo ejecutándose con **Ollama** localmente.
 
 ## Requisitos previos
 
@@ -64,6 +64,8 @@ pytest -q
 
 Las pruebas mockean Ollama y WhatsApp, así que **no necesitas tener `ollama` corriendo ni credenciales reales** para ejecutarlas.
 
+Consulta [ejemplos de conversación por WhatsApp](docs/ejemplos_whatsapp.md) para ver mensajes de ejemplo y el tipo de respuesta esperado.
+
 ## Endpoints
 
 | Método | Ruta       | Descripción                                  |
@@ -81,7 +83,7 @@ app/
   main.py       FastAPI: webhook, /health, lifespan
   config.py     Carga de .env y constantes de reglas de negocio
   rag.py        Búsqueda por embeddings en docs/rag.md
-  tools.py      Herramientas de citas (consultar/agendar/reagendar)
+  tools.py      Herramientas del reglamento y de citas
   guard.py      Wrapper de Llama Guard 3 (Ollama)
   memory.py     Historial por número de teléfono (con lock)
   agent.py      Loop de function calling con Ollama

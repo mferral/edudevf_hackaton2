@@ -271,6 +271,26 @@ HERRAMIENTAS: list[dict] = [
     {
         "type": "function",
         "function": {
+            "name": "consultar_reglamento",
+            "description": (
+                "Busca en el reglamento del consultorio la respuesta a "
+                "preguntas sobre precios, horarios, pagos y políticas."
+            ),
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "pregunta": {
+                        "type": "string",
+                        "description": "Pregunta del paciente sobre el consultorio.",
+                    }
+                },
+                "required": ["pregunta"],
+            },
+        },
+    },
+    {
+        "type": "function",
+        "function": {
             "name": "consultar_disponibilidad",
             "description": (
                 "Consulta los horarios disponibles en una fecha (YYYY-MM-DD) "

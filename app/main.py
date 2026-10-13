@@ -67,13 +67,12 @@ async def health() -> dict:
 
 
 @app.get("/webhook", tags=["whatsapp"], summary="Verificación del webhook (Meta)")
-async def verificar_webhook(request: Request) -> dict:
+async def verificar_webhook(request: Request ):
     """Verifica el `hub.verify_token` enviado por Meta al configurar el webhook."""
     params = request.query_params
     if params.get("hub.verify_token") == VERIFY_TOKEN:
         # Meta espera el challenge como texto plano (int o string)
-        challenge = params.get("hub.challenge", "")
-        return {"hub.challenge": challenge}
+        return int(params.get("hub.challenge"))
     return {"error": "token inválido"}
 
 

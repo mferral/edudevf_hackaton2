@@ -30,8 +30,8 @@ PHONE_ID: str = os.getenv("PHONE_ID", "")
 OLLAMA_HOST: str = os.getenv("OLLAMA_HOST", "http://localhost:11434")
 
 # --- Modelo y reglas de negocio ---
-MODELO_LLM = "llama3.1:8b"
-MODELO_GUARD = "llama-guard3"
+MODELO_LLM = "llama3.2" #llama3.1:8b
+MODELO_GUARD = "llama-guard3:1b" #llama-guard3
 MODELO_EMBEDDINGS = "paraphrase-multilingual-MiniLM-L12-v2"
 
 # Versión de la API de WhatsApp Cloud
