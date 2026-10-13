@@ -133,8 +133,9 @@ def test_fn_consultar_con_fecha_valida_devuelve_slots(agenda: Agenda) -> None:
 
 
 def test_fn_agendar_devuelve_folio(agenda: Agenda) -> None:
+    ahora = datetime(2026, 10, 12, 10, 0)
     r = fn_agendar_cita(
-        "525511111111", "2026-10-13", "10:00", "presencial", agenda
+        "525511111111", "2026-10-13", "10:00", "presencial", agenda, ahora=ahora
     )
     assert "Folio" in r
 
@@ -149,5 +150,7 @@ def test_fn_reagendar_exitoso(agenda: Agenda) -> None:
     cita = agenda.agendar(
         "525511111111", "2026-10-13", "10:00", ahora=ahora
     )
-    r = fn_reagendar_cita(cita.id, "2026-10-14", "11:00", agenda)
+    r = fn_reagendar_cita(
+        cita.id, "2026-10-14", "11:00", agenda, ahora=ahora
+    )
     assert "reagendada" in r.lower()

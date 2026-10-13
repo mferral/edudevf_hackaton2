@@ -231,11 +231,14 @@ def fn_agendar_cita(
     hora: str,
     modalidad: str,
     agenda: Agenda,
+    ahora: Optional[datetime] = None,
 ) -> str:
     if not (fecha and hora):
         return "Necesito fecha (YYYY-MM-DD) y hora (HH:MM) para agendar."
     try:
-        cita = agenda.agendar(numero, fecha, hora, modalidad or "presencial")
+        cita = agenda.agendar(
+            numero, fecha, hora, modalidad or "presencial", ahora=ahora
+        )
     except ValueError as e:
         return f"No pude agendar: {e}"
     return (
@@ -250,11 +253,12 @@ def fn_reagendar_cita(
     nueva_fecha: str,
     nueva_hora: str,
     agenda: Agenda,
+    ahora: Optional[datetime] = None,
 ) -> str:
     if not (cita_id and nueva_fecha and nueva_hora):
         return "Necesito el folio de la cita, la nueva fecha y la nueva hora."
     try:
-        cita = agenda.reagendar(cita_id, nueva_fecha, nueva_hora)
+        cita = agenda.reagendar(cita_id, nueva_fecha, nueva_hora, ahora=ahora)
     except ValueError as e:
         return f"No pude reagendar: {e}"
     return f"Cita reagendada: {cita.fecha} {cita.hora}. Folio: {cita.id}."
